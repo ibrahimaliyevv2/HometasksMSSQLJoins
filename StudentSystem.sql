@@ -10,6 +10,16 @@ CREATE TABLE Students
     BirthDate DATETIME2
 )
 
+ALTER TABLE Students
+ADD GroupId INT FOREIGN KEY REFERENCES Groups(Id)
+
+INSERT INTO Groups(No)
+VALUES
+('11A')
+
+UPDATE Students
+SET GroupId = 1
+
 CREATE TABLE Groups
 (
     Id INT PRIMARY KEY IDENTITY,
@@ -25,26 +35,18 @@ CREATE TABLE Subjects
 CREATE TABLE Exams
 (
     Id INT PRIMARY KEY IDENTITY,
-    ExamDate DATETIME2
+    ExamDate DATETIME2,
+    SubjectId INT FOREIGN KEY REFERENCES Subjects(Id)
 )
 
 CREATE TABLE StudentExams
 (
     Id INT PRIMARY KEY IDENTITY,
-    Result INT
+    Result INT,
+    StudentId INT FOREIGN KEY REFERENCES Students(Id),
+	ExamId INT FOREIGN KEY REFERENCES Exams(Id)
 )
 
-ALTER TABLE Students
-ADD GroupId INT FOREIGN KEY REFERENCES Groups(Id)
-
-ALTER TABLE Exams
-ADD SubjectId INT FOREIGN KEY REFERENCES Subjects(Id)
-
-ALTER TABLE StudentExams
-ADD StudentId INT FOREIGN KEY REFERENCES Students(Id)
-
-ALTER TABLE StudentExams
-ADD ExamId INT FOREIGN KEY REFERENCES Exams(Id)
 
 INSERT INTO Students(Name, Surname, BirthDate)
 VALUES
@@ -54,12 +56,6 @@ VALUES
 ('Vuqar', 'Memmedov', '2002-09-15'),
 ('Nermin', 'Qafarzade', '2000-05-26')
 
-INSERT INTO Groups(No)
-VALUES
-('11A')
-
-UPDATE Students
-SET GroupId = 1
 
 INSERT INTO Subjects(Name)
 VALUES
@@ -68,32 +64,35 @@ VALUES
 ('Geography'),
 ('Chemistry')
 
-INSERT INTO Exams(ExamDate)
+INSERT INTO Exams(ExamDate, SubjectId)
 VALUES
-('2020-10-11'),
-('2021-05-10'),
-('2021-09-11')
+('2020-10-11',1),
+('2021-05-10',2),
+('2021-09-11',3)
 
 INSERT INTO StudentExams(Result)
 VALUES
-(55),
-(58),
-(91),
-(89),
-(90),
-(86),
-(88),
-(56)
+(80,2,4),
+(90,1,2),
+(97,1,1),
+(35,2,2),
+(56,3,1)
 
 
 SELECT * FROM Exams
 
 
-SELECT Name, Surname, BirthDate, Groups.[No] AS 'Group No' FROM Students
-LEFT JOIN Groups ON Students.GroupId = Groups.Id
+SELECT * FROM Students
+JOIN Groups ON GroupId=Groups.Id
 
-SELECT Name, Surname, BirthDate, (SELECT COUNT(Id) FROM Exams WHERE Exams.Id = StudentExams.ExamId) AS 'Exam count' FROM Students
-LEFT JOIN StudentExams ON Students.Id = StudentExams.ExamId
+SELECT *,(SELECT COUNT(ExamId) FROM StudentExams WHERE StudentId=Students.Id) AS 'Exam count' FROM Students
 
-SELECT Name, Surname, BirthDate, ((SELECT COUNT(Id) FROM Exams WHERE Exams.Id = StudentExams.ExamId)=0) AS 'Exam count' FROM Students
-LEFT JOIN StudentExams ON Students.Id = StudentExams.ExamId
+SELECT * FROM Subjects
+LEFT JOIN Exams ON Subjects.Id=SubjectId
+
+SELECT *,(SELECT COUNT(StudentExams.ExamId) FROM StudentExams WHERE ExamId=Exams.Id) AS 'Student Count' FROM Exams
+JOIN Subjects ON Subjects.Id = Exams.SubjectId  WHERE Exams.Date = '04-17-2022'
+
+SELECT StudentExams.Id,ExamId,StudentId,Result,Students.Name+' '+Students.Surname AS 'Fullname',Groups.No FROM StudentExams JOIN Students ON StudentId=Students.Id JOIN Groups ON Students.GroupId=Groups.Id
+
+SELECT Students.Id,Students.Name,Students.Surname,Students.GroupId,Result FROM Students JOIN StudentExams ON Students.Id=StudentId
