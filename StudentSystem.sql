@@ -82,7 +82,7 @@ VALUES
 SELECT * FROM Exams
 
 
-SELECT * FROM Students
+SELECT Name, Surname, BirthDate, Groups.No FROM Students
 JOIN Groups ON GroupId=Groups.Id
 
 SELECT *,(SELECT COUNT(ExamId) FROM StudentExams WHERE StudentId=Students.Id) AS 'Exam count' FROM Students
