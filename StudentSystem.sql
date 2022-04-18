@@ -92,6 +92,8 @@ SELECT * FROM Students where (SELECT COUNT(ExamId) FROM StudentExams WHERE Stude
 SELECT *,(SELECT COUNT(StudentExams.ExamId) FROM StudentExams WHERE ExamId=Exams.Id) AS 'Student Count' FROM Exams
 JOIN Subjects ON Subjects.Id = Exams.SubjectId  WHERE Exams.ExamDate = '2022-04-17'
 
-SELECT StudentExams.Id,ExamId,StudentId,Result,Students.Name+' '+ Students.Surname AS 'Fullname',Groups.No FROM StudentExams JOIN Students ON StudentId=Students.Id JOIN Groups ON Students.GroupId=Groups.Id
+SELECT StudentExams.Id,ExamId,StudentId,Result,Students.Name+' '+ Students.Surname AS 'Fullname',Groups.No FROM StudentExams 
+JOIN Students ON StudentId=Students.Id JOIN Groups ON Students.GroupId=Groups.Id
 
-SELECT Students.Id,Students.Name,Students.Surname,Students.GroupId,Result FROM Students JOIN StudentExams ON Students.Id=StudentId
+SELECT Students.Id,Students.Name,Students.Surname,Students.GroupId,Result FROM Students 
+JOIN StudentExams ON Students.Id=StudentId
