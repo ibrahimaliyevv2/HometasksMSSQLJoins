@@ -95,5 +95,5 @@ JOIN Subjects ON Subjects.Id = Exams.SubjectId  WHERE Exams.ExamDate = '2022-04-
 SELECT StudentExams.Id,ExamId,StudentId,Result,Students.Name+' '+ Students.Surname AS 'Fullname',Groups.No FROM StudentExams 
 JOIN Students ON StudentId=Students.Id JOIN Groups ON Students.GroupId=Groups.Id
 
-SELECT Students.Id,Students.Name,Students.Surname,Students.GroupId,Result FROM Students 
+SELECT Students.Id,Students.Name,Students.Surname,Students.GroupId,SELECT(Avg(Result) FROM ExamStudents WHERE StudentExams.StudentId = Students.Id) FROM Students 
 JOIN StudentExams ON Students.Id=StudentId
