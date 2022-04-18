@@ -87,8 +87,7 @@ JOIN Groups ON GroupId=Groups.Id
 
 SELECT *,(SELECT COUNT(ExamId) FROM StudentExams WHERE StudentId=Students.Id) AS 'Exam count' FROM Students
 
-SELECT * FROM Subjects
-LEFT JOIN Exams ON Subjects.Id=SubjectId
+SELECT * FROM Students where (SELECT COUNT(ExamId) FROM StudentExams WHERE StudentId=Students.Id)=0
 
 SELECT *,(SELECT COUNT(StudentExams.ExamId) FROM StudentExams WHERE ExamId=Exams.Id) AS 'Student Count' FROM Exams
 JOIN Subjects ON Subjects.Id = Exams.SubjectId  WHERE Exams.ExamDate = '2020-10-11'
