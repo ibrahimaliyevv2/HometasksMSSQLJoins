@@ -90,7 +90,7 @@ SELECT *,(SELECT COUNT(ExamId) FROM StudentExams WHERE StudentId=Students.Id) AS
 SELECT * FROM Students where (SELECT COUNT(ExamId) FROM StudentExams WHERE StudentId=Students.Id)=0
 
 SELECT *,(SELECT COUNT(StudentExams.ExamId) FROM StudentExams WHERE ExamId=Exams.Id) AS 'Student Count' FROM Exams
-JOIN Subjects ON Subjects.Id = Exams.SubjectId  WHERE Exams.ExamDate = '2020-10-11'
+JOIN Subjects ON Subjects.Id = Exams.SubjectId  WHERE Exams.ExamDate = '2022-04-17'
 
 SELECT StudentExams.Id,ExamId,StudentId,Result,Students.Name+' '+ Students.Surname AS 'Fullname',Groups.No FROM StudentExams JOIN Students ON StudentId=Students.Id JOIN Groups ON Students.GroupId=Groups.Id
 
